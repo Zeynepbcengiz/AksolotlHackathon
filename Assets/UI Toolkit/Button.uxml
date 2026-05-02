@@ -1,3 +1,3 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Button text="Şehre Dön" name="Button" data-source-path="" view-data-key="" style="height: 32px;"/>
+    <ui:Button text="Şehre Dön" name="geri-buton" data-source-path="" view-data-key="" style="height: 40px; width: 114px; position: absolute; top: 17px; bottom: 11px; left: 5px; background-color: rgb(255, 240, 245);"/>
 </ui:UXML>

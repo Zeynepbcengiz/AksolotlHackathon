@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14751c41df2cb5d42b58272bd18d51bd, type: 3}
   m_Name: Hospital17
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
-  buildingID: H-17
-  buildingName: hospital17
-  cameraDistance: 15
-  cameraHeight: 10
+  id: H-17
+  ad: hospital17
+  tuketim: 0
+  yenilenebilir: 0
+  karbon: 0
+  isAnomaly: 0

@@ -1,10 +1,13 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewBuildingData", menuName = "CityPulse/Building Data")]
+// Sadece BİR KERE yazdığından emin ol
+[CreateAssetMenu(fileName = "NewBuildingData", menuName = "EnergyProject/BuildingData")]
 public class BuildingData : ScriptableObject
 {
-    public string buildingID; // API'de kullanılacak benzersiz anahtar
-    public string buildingName;
-    public float cameraDistance = 15f; // Binaya ne kadar yaklaşılacak?
-    public float cameraHeight = 10f;   // Kameranın yüksekliği
+    public string id;
+    public string ad;
+    public float tuketim;
+    public float yenilenebilir;
+    public double karbon;
+    public bool isAnomaly;
 }

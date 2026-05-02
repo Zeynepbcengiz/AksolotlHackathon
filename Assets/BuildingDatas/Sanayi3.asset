@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14751c41df2cb5d42b58272bd18d51bd, type: 3}
   m_Name: Sanayi3
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
-  buildingID: S-03
-  buildingName: sanayi3
-  cameraDistance: 15
-  cameraHeight: 10
+  id: S-03
+  ad: sanayi3
+  tuketim: 0
+  yenilenebilir: 0
+  karbon: 0
+  isAnomaly: 0

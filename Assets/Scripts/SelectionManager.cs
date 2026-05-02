@@ -1,71 +1,43 @@
 using UnityEngine;
-using Unity.Cinemachine;
-using UnityEngine.UIElements; // Buton kontrolü için kalmalı
+using UnityEngine.UIElements;
 
 public class SelectionManager : MonoBehaviour
 {
-    [Header("Kameralar")]
-    public CinemachineCamera birdEyeCam;
-    public CinemachineCamera focusCam;
-
-    [Header("Ayarlar")]
-    public LayerMask buildingLayer;
-    public CamMovement movementScript;
-
-    [Header("UI Toolkit")]
-    public UIDocument uiDoc;
-    private Button backButton;
-
-    private bool isFocused = false;
+    // Public yaparak Inspector'dan sürüklememize olanak sağlıyoruz
+    public UIDocument uiDoc; 
+    
+    private Label binaAdiLabel;
+    private Label energyLabel;
+    private Label karbonLabel;
 
     void OnEnable()
     {
-        // UI Toolkit butonunu bul ve bağla
-        var root = uiDoc.rootVisualElement;
-        backButton = root.Q<Button>("geri-buton"); 
+        // Eğer Inspector'dan atanmadıysa bileşeni üzerinde ara
+        if (uiDoc == null) uiDoc = GetComponent<UIDocument>();
 
-        if (backButton != null)
+        if (uiDoc != null)
         {
-            backButton.clicked += ReturnToBirdEye;
-            backButton.style.display = DisplayStyle.None; // Başlangıçta gizli
+            var root = uiDoc.rootVisualElement;
+            // UI Builder'daki "Name" alanına yazdığın isimlerle birebir aynı olmalı!
+            binaAdiLabel = root.Q<Label>("bina-adi"); 
+            energyLabel = root.Q<Label>("tuketim-degeri"); 
+            karbonLabel = root.Q<Label>("karbon-degeri");
+        }
+        else
+        {
+            Debug.LogError("HATA: SelectionManager objesinde UIDocument bulunamadı!");
         }
     }
 
-    void Update()
+    public void FocusBuilding(Building building)
     {
-        // Klasik Sol Tık (Eski Sistem)
-        if (Input.GetMouseButtonDown(0) && !isFocused)
+        if (building != null && building.data != null)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, 1000f, buildingLayer))
-            {
-                Building clickedBuilding = hit.collider.GetComponent<Building>();
-                if (clickedBuilding != null) FocusBuilding(clickedBuilding);
-            }
+            if (binaAdiLabel != null) binaAdiLabel.text = building.data.ad;
+            if (energyLabel != null) energyLabel.text = building.data.tuketim.ToString("F2") + " kW";
+            if (karbonLabel != null) karbonLabel.text = building.data.karbon.ToString("F2") + " kg";
+            
+            Debug.Log($"UI Güncellendi: {building.data.id} - {building.data.tuketim} kW");
         }
-        
-    }
-
-    void FocusBuilding(Building building)
-    {
-        focusCam.Follow = building.focusPoint;
-        focusCam.LookAt = building.focusPoint;
-        focusCam.Priority = 20;
-
-        movementScript.canMove = false;
-        isFocused = true;
-
-        if (backButton != null) backButton.style.display = DisplayStyle.Flex;
-    }
-
-    public void ReturnToBirdEye()
-    {
-        focusCam.Priority = 5;
-        movementScript.canMove = true;
-        isFocused = false;
-
-        if (backButton != null) backButton.style.display = DisplayStyle.None;
     }
 }

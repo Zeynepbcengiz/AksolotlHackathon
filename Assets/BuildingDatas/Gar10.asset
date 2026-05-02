@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14751c41df2cb5d42b58272bd18d51bd, type: 3}
   m_Name: Gar10
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
-  buildingID: G-10
-  buildingName: gar10
-  cameraDistance: 15
-  cameraHeight: 10
+  id: G-10
+  ad: gar10
+  tuketim: 0
+  yenilenebilir: 0
+  karbon: 0
+  isAnomaly: 0
