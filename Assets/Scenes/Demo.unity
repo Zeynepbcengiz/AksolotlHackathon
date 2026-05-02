@@ -17145,6 +17145,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4720c7a1223bda947a858f328c41275c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SelectionManager
+  birdEyeCam: {fileID: 506489016}
+  focusCam: {fileID: 319391458}
+  buildingLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  movementScript: {fileID: 1763596229}
   uiDoc: {fileID: 1185818706}
 --- !u!4 &446662445
 Transform:
