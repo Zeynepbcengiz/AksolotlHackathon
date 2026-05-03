@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   id: S-04
   ad: sanayi4
-  tuketim: 0
+  tuketim: 6.8019847e+10
   yenilenebilir: 0
-  karbon: 0
+  karbon: 28134369280
   isAnomaly: 0

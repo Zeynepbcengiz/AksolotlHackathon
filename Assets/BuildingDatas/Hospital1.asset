@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   id: H-01
   ad: hospital1
-  tuketim: 0
+  tuketim: 9.849415e+11
   yenilenebilir: 0
-  karbon: 0
-  isAnomaly: 0
+  karbon: 407391502336
+  isAnomaly: 1

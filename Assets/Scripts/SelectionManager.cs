@@ -11,11 +11,11 @@ public class SelectionManager : MonoBehaviour
     [Header("Ayarlar")]
     public LayerMask buildingLayer;
     public CamMovement movementScript;
+    public GameObject followLight; // Bizimle gezen o ışığı buraya sürükle
 
     [Header("UI Toolkit")]
     public UIDocument uiDoc;
     private Button backButton;
-    // Verileri yazacağımız etiketler:
     private Label binaAdiLabel;
     private Label energyLabel;
     private Label karbonLabel;
@@ -26,10 +26,8 @@ public class SelectionManager : MonoBehaviour
     {
         var root = uiDoc.rootVisualElement;
         
-        // Butonu bul ve bağla
+        // UI Elemanlarını Bağla
         backButton = root.Q<Button>("geri-buton"); 
-        
-        // Veri etiketlerini bul (UI Builder'daki isimlerle aynı olmalı)
         binaAdiLabel = root.Q<Label>("bina-adi");
         energyLabel = root.Q<Label>("tuketim-degeri");
         karbonLabel = root.Q<Label>("karbon-degeri");
@@ -43,6 +41,7 @@ public class SelectionManager : MonoBehaviour
 
     void Update()
     {
+        // Eğer odaklanmadıysak ve sol tık yapıldıysa
         if (Input.GetMouseButtonDown(0) && !isFocused)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -50,7 +49,6 @@ public class SelectionManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 1000f, buildingLayer))
             {
-                // Collider çocuk objede olabilir, o yüzden InParent kullanmak daha güvenlidir
                 Building clickedBuilding = hit.collider.GetComponentInParent<Building>();
                 if (clickedBuilding != null) FocusBuilding(clickedBuilding);
             }
@@ -59,22 +57,26 @@ public class SelectionManager : MonoBehaviour
 
     void FocusBuilding(Building building)
     {
-        // 1. Kamera Kurgusu (Senin sistemin)
+        // 1. Kamera Geçişi
         focusCam.Follow = building.focusPoint;
         focusCam.LookAt = building.focusPoint;
-        focusCam.Priority = 20;
+        
+        // Öncelikleri netleştirelim
+        birdEyeCam.Priority = 10;
+        focusCam.Priority = 20; // Focus kamerası üste çıkar
 
         movementScript.canMove = false;
         isFocused = true;
 
-        // 2. Veri Entegrasyonu (Backend'den gelenleri yazdırıyoruz)
+        // 2. Işığı Kapat (Bina ışıkları daha iyi görünsün diye istersen)
+        if (followLight != null) followLight.SetActive(false);
+
+        // 3. Verileri Yazdır
         if (building.data != null)
         {
             if (binaAdiLabel != null) binaAdiLabel.text = building.data.ad;
             if (energyLabel != null) energyLabel.text = building.data.tuketim.ToString("F2") + " kW";
             if (karbonLabel != null) karbonLabel.text = building.data.karbon.ToString("F2") + " kg";
-            
-            Debug.Log($"<color=cyan>Odaklanıldı: {building.data.id} - Veri: {building.data.tuketim}</color>");
         }
 
         if (backButton != null) backButton.style.display = DisplayStyle.Flex;
@@ -82,13 +84,20 @@ public class SelectionManager : MonoBehaviour
 
     public void ReturnToBirdEye()
     {
-        focusCam.Priority = 5;
+        // 1. Kamera Önceliklerini Sıfırla
+        focusCam.Priority = 5; 
+        birdEyeCam.Priority = 30; // Kuşbakışı en üste çıksın
+
         movementScript.canMove = true;
         isFocused = false;
 
+        // 2. Takip Işığını Geri Getir
+        if (followLight != null) followLight.SetActive(true);
+
+        // 3. UI Kapat
         if (backButton != null) backButton.style.display = DisplayStyle.None;
         
-        // İstersen geri dönünce yazıları temizleyebilirsin:
-        // if (binaAdiLabel != null) binaAdiLabel.text = "Bina Seçilmedi";
+        // Metinleri temizle
+        if (binaAdiLabel != null) binaAdiLabel.text = "Bina Seçilmedi";
     }
 }
