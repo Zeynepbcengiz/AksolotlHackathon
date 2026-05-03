@@ -18791,6 +18791,7 @@ MonoBehaviour:
     m_Bits: 64
   movementScript: {fileID: 1763596229}
   followLight: {fileID: 1563242159}
+  maxVeriDegeri: 200
   uiDoc: {fileID: 1185818706}
 --- !u!4 &446662445
 Transform:

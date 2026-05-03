@@ -10,4 +10,9 @@ public class BuildingData : ScriptableObject
     public float yenilenebilir;
     public double karbon;
     public bool isAnomaly;
+    
+    public float aydinlatma;
+    public float suIsitma; 
+    public float gaz; 
+    // ... diğerleri
 }

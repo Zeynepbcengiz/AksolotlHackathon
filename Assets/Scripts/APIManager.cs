@@ -39,6 +39,10 @@ public class APIManager : MonoBehaviour
                     if (hedef != null) {
                         hedef.data.tuketim = v.tuketim;
                         hedef.data.karbon = (float)v.karbon;
+                        hedef.data.aydinlatma = v.aydinlatma;
+          
+                        hedef.data.gaz = v.gaz;
+                        hedef.data.suIsitma = v.suIsitma;
                         Debug.Log($"<color=green>{v.id} Güncellendi: {v.tuketim}</color>");
                     }
                 }
@@ -51,5 +55,8 @@ public class APIManager : MonoBehaviour
         public string id;      // Backend'dekiyle aynı isimde olmalı
         public float tuketim;
         public double karbon;
+        public float aydinlatma;    
+        public float gaz;           
+        public float suIsitma;  
     }
 }
