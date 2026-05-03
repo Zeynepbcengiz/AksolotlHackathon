@@ -2,9 +2,44 @@ using UnityEngine;
 using Unity.Cinemachine;
 using UnityEngine.UIElements;
 using TMPro;
+using System.Collections; 
+using Image = UnityEngine.UI.Image;
+
 
 public class SelectionManager : MonoBehaviour
 {
+
+   // Image kullanacağımız için bu gerekli
+
+[Header("Dinamik Barlar")]
+public Image tuketimBarFill;
+public Image karbonBarFill;
+
+
+
+// 0'dan hedef sayıya hızla sayan fonksiyon
+IEnumerator CountUpTo(TMP_Text textComponent, float targetValue, string suffix, string prefix)
+{
+    float duration = 1.0f; // 1 saniyede tamamlansın
+    float currentValue = 0f;
+    float elapsedTime = 0f;
+
+    while (elapsedTime < duration)
+    {
+        elapsedTime += Time.deltaTime;
+        currentValue = Mathf.Lerp(0, targetValue, elapsedTime / duration);
+        
+        // Ekrana anlık yaz
+        textComponent.text = prefix + currentValue.ToString("F1") + suffix;
+        yield return null;
+    }
+    
+    // Tam sayıya ulaştığında emin olmak için son kez yaz
+    textComponent.text = prefix + targetValue.ToString("F1") + suffix;
+}
+
+// UpdateAnalysisUI fonksiyonu içine şunu ekle:
+
     [Header("Kameralar")]
     public CinemachineCamera birdEyeCam;
     public CinemachineCamera focusCam;
@@ -129,7 +164,23 @@ void Start()
 
     void UpdateAnalysisUI(BuildingData data)
 {
+
+    float dolulukOrani = data.tuketim / 200f;
+    Debug.Log($"Bina: {data.ad}, Tüketim: {data.tuketim}, Oran: {dolulukOrani}");
+
+    if (tuketimBarFill != null)
+        tuketimBarFill.fillAmount = dolulukOrani;
     if (data == null) return;
+     // ... Metin atamaların aynen kalıyor ...
+    if (enerjiText != null) StartCoroutine(CountUpTo(enerjiText, data.tuketim, " kW", "ENRJ: "));
+
+    // Değeri 0 ile 1 arasına sıkıştırıp barı dolduruyoruz (Örn: Max kapasite 200 olsun)
+    if (tuketimBarFill != null)
+        tuketimBarFill.fillAmount = Mathf.Clamp01(data.tuketim / 200f);
+
+    if (karbonBarFill != null)
+        karbonBarFill.fillAmount = Mathf.Clamp01((float)data.karbon / 200f);
+
 
     // 1. UI Toolkit (Sol Panel) Güncelleme - Sadece objeler varsa çalışır
     if (binaAdiLabel != null) binaAdiLabel.text = data.ad;
@@ -165,6 +216,7 @@ void Start()
     {
         Debug.LogWarning("DİKKAT: Hologram metinleri (adText vb.) Inspector'dan sürüklenmemiş!");
     }
+    
 }
     
 
